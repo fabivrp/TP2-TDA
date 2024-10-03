@@ -16,6 +16,11 @@ def greedy(turno, primer_moneda, ultima_moneda):
         return max(0 + primer_moneda, 0 + ultima_moneda)
     return max(primer_moneda, ultima_moneda)
 
+def quitar_moneda_pd(izq, der, monedas, memoria_sophie, turno):
+    if memoria_sophie[turno - 1] + monedas[izq] == memoria_sophie[turno]:
+        return izq + 1, der
+    else:
+        return izq, der - 1
 
 def quitar_moneda(izq, der, primer_moneda, ultima_moneda):
     if primer_moneda > ultima_moneda:
@@ -38,7 +43,7 @@ def jugar(monedas: list, memoria_sophie: list, memoria_mateo: list):
             memoria_sophie[n] = ecuacion_recurrencia(memoria_sophie, n, monedas[izq], monedas[der])
 
             # Saco la moneda elegida
-            izq, der = quitar_moneda(izq, der, monedas[izq], monedas[der])
+            izq, der = quitar_moneda_pd(izq, der, monedas, memoria_sophie, n)
 
         else:
             n = math.floor(turno / 2)
@@ -51,20 +56,21 @@ def jugar(monedas: list, memoria_sophie: list, memoria_mateo: list):
 
 def reconstruir(monedas, memoria_sophie, memoria_mateo):
     monedas_elegidas = []
+    
 
     izq = 0
     der = len(monedas) - 1
 
     for turno in range(len(monedas)):
         if turno % 2 == 0:
-            if memoria_sophie[turno // 2] + monedas[izq] == memoria_sophie[turno // 2 - 1]:
+            if memoria_sophie[turno // 2 - 1] + monedas[izq] == memoria_sophie[turno // 2]:
                 monedas_elegidas.append("Sophie elige " + str(monedas[izq]))
                 izq += 1
             else:
                 monedas_elegidas.append("Sophie elige " + str(monedas[der]))
                 der -= 1
         else:
-            if memoria_mateo[math.floor(turno // 2)] - monedas[izq] == memoria_mateo[math.floor(turno // 2) - 1]:
+            if memoria_mateo[math.floor(turno // 2) - 1] + monedas[izq] == memoria_mateo[math.floor(turno // 2)]:
                 monedas_elegidas.append("Mateo elige " + str(monedas[izq]))
                 izq += 1
             else:
