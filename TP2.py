@@ -1,106 +1,62 @@
 import csv
 import math
+# from tabulate import tabulate
 
 def leer_archivo(archivo):
     with open(archivo, newline='') as csvfile:
         data = list(csv.reader(csvfile, delimiter=';'))
         return [int(moneda) for moneda in data[1:][0]]
     
-def ecuacion_recurrencia(memoria, turno, monedas, izq, der):
-    if turno == 0:
-        return max(monedas[0], monedas[-1])
-    return max( 
-        memoria[turno - 1] + monedas[izq], 
-        memoria[turno - 1] + monedas[der],
-        memoria[turno - 2] + monedas[len(memoria) - der],
-        memoria[turno - 2] + monedas[len(memoria) - izq + 1]
-    )
 
-def greedy(turno, primer_moneda, ultima_moneda):
-    if turno == 1:
-        return max(0 + primer_moneda, 0 + ultima_moneda)
-    return max(primer_moneda, ultima_moneda)
+def ecuacion_recurrencia(optimo, monedas, izq, der):
 
-def quitar_moneda_pd(izq, der, monedas, memoria_sophie, turno):
-    if memoria_sophie[turno - 1] + monedas[izq] == memoria_sophie[turno]:
-        return izq + 1, der
+    if monedas[izq + 1] > monedas[der]:
+        eleccion_izq = optimo[izq + 2][der] if izq + 2 <= der else 0
     else:
-        return izq, der - 1
+        eleccion_izq = optimo[izq + 1][der - 1] if izq + 1 <= der - 1 else 0
 
-def quitar_moneda(izq, der, primer_moneda, ultima_moneda):
-    if primer_moneda > ultima_moneda:
-        return izq + 1, der
+    if monedas[izq] > monedas[der - 1]:
+        eleccion_der = optimo[izq + 1][der - 1] if izq + 1 <= der - 1 else 0
     else:
-        return izq, der - 1
+        eleccion_der = optimo[izq][der - 2] if izq <= der - 2 else 0
 
-    
-def jugar(monedas: list, memoria_sophie: list, memoria_mateo: list):
+    return max(monedas[izq] + eleccion_izq, monedas[der] + eleccion_der)
 
-    izq = 0
-    der = len(monedas) - 1
 
-    for turno in range(len(monedas)):
+def jugar(monedas: list):
 
-        # Turno de Sophia
-        if turno % 2 == 0:
+    optimo = [[0 for _ in range(len(monedas))] for _ in range(len(monedas))]
 
-            n = turno // 2
-            memoria_sophie[n] = ecuacion_recurrencia(memoria_sophie, n, monedas, izq, der)
+    for i in range(len(monedas)):
+        optimo[i][i] = monedas[i]
 
-            # Saco la moneda elegida
-            izq, der = quitar_moneda_pd(izq, der, monedas, memoria_sophie, n)
+    for cantidad in range(2, len(monedas) + 1):
+        for i in range(len(monedas) - cantidad + 1):
+            j = i + cantidad - 1
+            optimo[i][j] = ecuacion_recurrencia(optimo, monedas, i, j)
 
-        else:
-            n = math.floor(turno / 2)
-            memoria_mateo[n] = memoria_mateo[n - 1] + greedy(n, monedas[izq], monedas[der])
+    return reconstruir_solucion(optimo, monedas)
 
-            # Saco la moneda elegida
-            izq, der = quitar_moneda(izq, der, monedas[izq], monedas[der])
 
-    return reconstruir(monedas, memoria_sophie, memoria_mateo)
+def reconstruir_solucion(optimo, monedas):
+    i = 0
+    j = len(monedas) - 1
 
-def reconstruir(monedas, memoria_sophie, memoria_mateo):
-    monedas_elegidas = []
-    
-    izq = 0
-    der = len(monedas) - 1
+    elecciones_sophia = []
+    elecciones_mateo = []
 
-    for turno in range(len(monedas)):
+    # print(tabulate(optimo, tablefmt="fancy_grid"))
 
-        if turno % 2 == 0:
-            n = turno // 2
-            if memoria_sophie[n] + monedas[izq] >= memoria_sophie[n - 1]:
-                monedas_elegidas.append("Sophie elige " + str(monedas[izq]))
-                izq += 1
-            elif memoria_sophie[n] + monedas[der] >= memoria_sophie[n - 1]:
-                monedas_elegidas.append("Sophie elige " + str(monedas[der]))
-                der -= 1
-        else:
-            n = math.floor(turno / 2)
-            if memoria_mateo[n] + monedas[izq] >= memoria_mateo[n - 1]:
-                monedas_elegidas.append("Mateo elige " + str(monedas[izq]))
-                izq += 1
-            elif memoria_mateo[n] + monedas[der] >= memoria_mateo[n - 1]:
-                monedas_elegidas.append("Mateo elige " + str(monedas[der]))
-                der -= 1
+    # Falta reconstruir la solución acá
 
-    return monedas_elegidas
+    return elecciones_sophia, elecciones_mateo
 
 
 if __name__ == "__main__":
     monedas = leer_archivo('archivos/10.txt')
 
-    # Inicializo la memoria con 0s. Si monedas es par, la memoria es la mitad de monedas. 
-    # Si monedas es impar, la memoria es la mitad de monedas + 1.
-    memoria_sophie = [0] * (math.ceil(len(monedas) / 2)) 
-    memoria_mateo = [0] * (len(monedas) // 2)  
+    elecciones_sophia, elecciones_mateo = jugar(monedas)
 
-    patron_elegido = jugar(monedas, memoria_sophie, memoria_mateo)
+    print("Elecciones Sophia:", elecciones_sophia)
+    print("Elecciones Mateo:", elecciones_mateo)
 
-    for index, eleccion in enumerate(patron_elegido):
-        print("Turno", index + 1, ":", eleccion)
-
-    print("Acumulado Sophie:", memoria_sophie[-1])
-    print("Acumulado Mateo:", memoria_mateo[-1])
-    print("Memoria Sophie:", memoria_sophie)
-    print("Memoria Mateo:", memoria_mateo)
