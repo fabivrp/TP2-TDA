@@ -45,6 +45,8 @@ def reconstruir_solucion(optimo, monedas):
     elecciones_sophia = []
     elecciones_mateo = []
 
+    print("Optimo:", optimo[0][-1])
+
     # print(tabulate(optimo, tablefmt="fancy_grid"))
 
     # Falta reconstruir la solución acá
