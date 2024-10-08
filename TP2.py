@@ -1,6 +1,7 @@
 import csv
-import math
-# from tabulate import tabulate
+from tabulate import tabulate
+import sys
+from tests import tests
 
 def leer_archivo(archivo):
     with open(archivo, newline='') as csvfile:
@@ -42,23 +43,49 @@ def reconstruir_solucion(optimo, monedas):
     i = 0
     j = len(monedas) - 1
 
-    elecciones_sophia = []
-    elecciones_mateo = []
+    turno_sophia = True
 
-    print("Optimo:", optimo[0][-1])
+    elecciones = []
 
-    # print(tabulate(optimo, tablefmt="fancy_grid"))
+    while i <= j:
+        if turno_sophia:
+            
+            if monedas[i] + (optimo[i + 2][j] if i + 2 <= j else 0) > monedas[j] + (optimo[i + 1][j - 1] if i + 1 <= j - 1 else 0):
+                elecciones.append(f"Sophia debe agarrar la primera ({monedas[i]})")
+                i += 1
+            else:
+                elecciones.append(f"Sophia debe agarrar la ultima ({monedas[j]})")
+                j -= 1
+        else: 
+            if monedas[i] > monedas[j]:
+                elecciones.append(f"Mateo agarra la primera ({monedas[i]})")
+                i += 1
+            else:
+                elecciones.append(f"Mateo agarra la ultima ({monedas[j]})")
+                j -= 1
 
-    # Falta reconstruir la solución acá
+        turno_sophia = not turno_sophia
 
-    return elecciones_sophia, elecciones_mateo
+    return elecciones
+
 
 
 if __name__ == "__main__":
-    monedas = leer_archivo('archivos/10.txt')
 
-    elecciones_sophia, elecciones_mateo = jugar(monedas)
+    if sys.argv[1] == "-h":
+        print("Uso: python3 TP2.py [numero_archivo]")
+        sys.exit()
 
-    print("Elecciones Sophia:", elecciones_sophia)
-    print("Elecciones Mateo:", elecciones_mateo)
+    if len(sys.argv) != 2:
+        print("Error: cantidad de argumentos invalida")
+        sys.exit()
 
+    if sys.argv[1] == "-t" or sys.argv[1] == "--test":
+        tests(leer_archivo, jugar)
+        sys.exit()
+
+    monedas = leer_archivo(f'archivos/{str(sys.argv[1])}.txt')
+    elecciones = jugar(monedas)
+
+    print(tabulate([[i + 1, eleccion] for i, eleccion in enumerate(elecciones)], headers=["Movimiento", "Eleccion"]))
+   
