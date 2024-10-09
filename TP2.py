@@ -43,28 +43,68 @@ def reconstruir_solucion(optimo, monedas):
     i = 0
     j = len(monedas) - 1
 
+    # print(tabulate(optimo, headers=[i for i in range(1, len(monedas) + 1)], showindex=[i for i in range(1, len(monedas) + 1)]))
+
     turno_sophia = True
+
+    ganancia_sophia = 0
+    ganancia_mateo = 0
 
     elecciones = []
 
     while i <= j:
         if turno_sophia:
-            
-            if monedas[i] + (optimo[i + 2][j] if i + 2 <= j else 0) > monedas[j] + (optimo[i + 1][j - 1] if i + 1 <= j - 1 else 0):
+            if monedas[i] + optimo[i + 2][j] == optimo[i][j]:
                 elecciones.append(f"Sophia debe agarrar la primera ({monedas[i]})")
+                ganancia_sophia += monedas[i]
                 i += 1
+            elif monedas[i] + optimo[i + 1][j - 1] == optimo[i][j]:
+                elecciones.append(f"Sophia debe agarrar la primera ({monedas[i]})")
+                ganancia_sophia += monedas[i]
+                i += 1
+            elif monedas[j] + optimo[i + 1][j - 1] == optimo[i][j]:
+                elecciones.append(f"Sophia debe agarrar la ultima ({monedas[j]})")
+                ganancia_sophia += monedas[j]
+                j -= 1
             else:
                 elecciones.append(f"Sophia debe agarrar la ultima ({monedas[j]})")
+                ganancia_sophia += monedas[j]
                 j -= 1
-        else: 
+            # Está faltando un caso acá y hace que falle los casos más grandes
+        else:
             if monedas[i] > monedas[j]:
                 elecciones.append(f"Mateo agarra la primera ({monedas[i]})")
+                ganancia_mateo += monedas[i]
                 i += 1
             else:
                 elecciones.append(f"Mateo agarra la ultima ({monedas[j]})")
+                ganancia_mateo += monedas[j]
                 j -= 1
 
         turno_sophia = not turno_sophia
+
+    print(f"Ganancia Sophia: {ganancia_sophia}")
+    print(f"Ganancia Mateo: {ganancia_mateo}")
+
+    return elecciones
+
+    # while i <= j:
+    #     if turno_sophia:
+    #         if monedas[i] + (optimo[i + 2][j] if i + 2 <= j else 0) > monedas[j] + (optimo[i + 1][j - 1] if i + 1 <= j - 1 else 0):
+    #             elecciones.append(f"Sophia debe agarrar la primera ({monedas[i]})")
+    #             i += 1
+    #         else:
+    #             elecciones.append(f"Sophia debe agarrar la ultima ({monedas[j]})")
+    #             j -= 1
+    #     else: 
+    #         if monedas[i] > monedas[j]:
+    #             elecciones.append(f"Mateo agarra la primera ({monedas[i]})")
+    #             i += 1
+    #         else:
+    #             elecciones.append(f"Mateo agarra la ultima ({monedas[j]})")
+    #             j -= 1
+
+    #     turno_sophia = not turno_sophia
 
     return elecciones
 

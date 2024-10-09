@@ -47,12 +47,19 @@ def tests(leer_archivo, jugar):
         elecciones = jugar(monedas)
         paso_test = True
 
+        cant_fallas = 0
+        ultima_falla = -1
+
         for i, movimiento in enumerate(juegos[f'{archivo}.txt']['movimientos']):
             if movimiento != elecciones[i]:
-                print(f"({i}) Movimiento correcto: {movimiento}. Eleccion: {elecciones[i]}.")
-                print("No paso el test de", archivo)
+                if ultima_falla != i - 1 or ultima_falla == -1:
+                    print(f"({i}) Movimiento incorrecto: {movimiento}. Nuestro algoritmo eligio: {elecciones[i]}.")
+                ultima_falla = i
                 paso_test = False
-                break
-
+                cant_fallas += 1
+                
         if paso_test:
             print(f"Paso el test de {archivo}.txt")
+        else:
+            print("No paso el test de", archivo)
+            print(f"Errores: {cant_fallas}")
