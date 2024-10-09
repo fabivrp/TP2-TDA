@@ -1,3 +1,4 @@
+from colorama import Fore, Style
 
 def extraer_juegos(nombre_archivo):
     juegos = {}
@@ -59,9 +60,9 @@ def tests(leer_archivo, jugar):
                 cant_fallas += 1
                 
         if paso_test:
-            print(f"Paso el test de {archivo}.txt")
+            print(Fore.GREEN + f"Paso el test de {archivo}.txt" + Style.RESET_ALL)
         else:
-            print("No paso el test de", archivo)
+            print(Fore.RED + "No paso el test de", archivo + Style.RESET_ALL)
             print(f"Errores: {cant_fallas}")
 
 

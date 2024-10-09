@@ -37,7 +37,6 @@ def jugar(monedas: list):
             j = i + cantidad - 1
             optimo[i][j] = ecuacion_recurrencia(optimo, monedas, i, j)
 
-    print("Optimo Sophia calculado por tabla:", optimo[0][len(monedas) - 1])
 
     return reconstruir_solucion(optimo, monedas)
 
