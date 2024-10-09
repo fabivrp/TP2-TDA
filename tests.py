@@ -33,7 +33,7 @@ def extraer_juegos(nombre_archivo):
 
 
 def tests(leer_archivo, jugar):
-    archivos_disponibles = [10, 20, 25, 50, 100, 1000, 2000, 5000, 10000]
+    archivos_disponibles = [5, 10, 20, 25, 50, 100, 1000, 2000, 5000, 10000]
 
     juegos = extraer_juegos("Resultados Esperados.txt")
 
