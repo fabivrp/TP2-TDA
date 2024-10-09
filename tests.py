@@ -63,3 +63,25 @@ def tests(leer_archivo, jugar):
         else:
             print("No paso el test de", archivo)
             print(f"Errores: {cant_fallas}")
+
+
+def unittest(leer_archivo, jugar, archivo):
+    juegos = extraer_juegos("Resultados Esperados.txt")
+
+    monedas = leer_archivo(f'archivos/{archivo}.txt')
+    elecciones = jugar(monedas)
+    paso_test = True
+
+    cant_fallas = 0
+
+    for i, movimiento in enumerate(juegos[f'{archivo}.txt']['movimientos']):
+        if movimiento != elecciones[i]:
+            print(f"({i}) Movimiento incorrecto: {movimiento}. Nuestro algoritmo eligio: {elecciones[i]}.")
+            paso_test = False
+            cant_fallas += 1
+
+    if paso_test:
+        print(f"Paso el test de {archivo}.txt")
+    else:
+        print("No paso el test de", archivo)
+        print(f"Errores: {cant_fallas}")
