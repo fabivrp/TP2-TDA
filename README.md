@@ -1,8 +1,14 @@
 # TP2
 
-*Importante*: No tocar la estructura del directorio.
+**Importante**: No tocar la estructura del directorio.
 
 ## Cómo usar los archivos
+
+Primero hay que instalar unos paquetes en un entorno.
+
+```
+pip install -r requirements.txt
+```
 
 ### Usar un archivo en particular
 
