@@ -25,9 +25,11 @@ python TP2.py -t [numero_archivo]
 ```
 
 ### Ejecutar pruebas en todos los archivos
-
+```
 python TP2.py --test
+```
 
 ó
-
+```
 python TP2.py -t
+```
