@@ -45,7 +45,7 @@ def tests(leer_archivo, jugar):
         print(f"Corriendo test de {archivo}.txt")
 
         monedas = leer_archivo(f'archivos/{archivo}.txt')
-        elecciones = jugar(monedas)
+        elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
         paso_test = True
 
         cant_fallas = 0
@@ -58,19 +58,15 @@ def tests(leer_archivo, jugar):
                 ultima_falla = i
                 paso_test = False
                 cant_fallas += 1
-                
-        if paso_test:
-            print(Fore.GREEN + f"Paso el test de {archivo}.txt" + Style.RESET_ALL)
-        else:
-            print(Fore.RED + "No paso el test de", archivo + Style.RESET_ALL)
-            print(f"Errores: {cant_fallas}")
 
+        resultados(ganancia_sophia, ganancia_mateo, archivo, juegos, cant_fallas, paso_test)
+        
 
 def unittest(leer_archivo, jugar, archivo):
     juegos = extraer_juegos("Resultados Esperados.txt")
 
     monedas = leer_archivo(f'archivos/{archivo}.txt')
-    elecciones = jugar(monedas)
+    elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
     paso_test = True
 
     cant_fallas = 0
@@ -81,8 +77,20 @@ def unittest(leer_archivo, jugar, archivo):
             paso_test = False
             cant_fallas += 1
 
+    resultados(ganancia_sophia, ganancia_mateo, archivo, juegos, cant_fallas, paso_test)
+
+
+def resultados(ganancia_sophia, ganancia_mateo, archivo, juegos, cant_fallas, paso_test):
+    if ganancia_sophia != juegos[f'{archivo}.txt']['ganancia_sophia']:
+        print(f"Ganancia de Sophia incorrecta. Esperado: {juegos[f'{archivo}.txt']['ganancia_sophia']}. Obtenido: {ganancia_sophia}.")
+        paso_test = False
+        
+    if ganancia_mateo != juegos[f'{archivo}.txt']['ganancia_mateo']:
+        print(f"Ganancia de Mateo incorrecta. Esperado: {juegos[f'{archivo}.txt']['ganancia_mateo']}. Obtenido: {ganancia_mateo}.")
+        paso_test = False
+
     if paso_test:
-        print(f"Paso el test de {archivo}.txt")
+        print(Fore.GREEN + f"Paso el test de {archivo}.txt" + Style.RESET_ALL)
     else:
-        print("No paso el test de", archivo)
+        print(Fore.RED + f"No paso el test de {archivo}.txt"  + Style.RESET_ALL)
         print(f"Errores: {cant_fallas}")

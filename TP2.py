@@ -2,6 +2,9 @@ import csv
 from tabulate import tabulate
 import sys
 from tests import tests, unittest
+from colorama import Fore, Style, init
+
+init()
 
 
 def leer_archivo(archivo):
@@ -17,7 +20,7 @@ def ecuacion_recurrencia(optimo, monedas, izq, der):
     else:
         eleccion_izq = optimo[izq + 1][der - 1] if izq + 1 <= der - 1 else 0
 
-    if monedas[izq] > monedas[der - 1]:
+    if monedas[izq] > monedas[der - 2]:
         eleccion_der = optimo[izq + 1][der - 1] if izq + 1 <= der - 1 else 0
     else:
         eleccion_der = optimo[izq][der - 2] if izq <= der - 2 else 0
@@ -63,18 +66,22 @@ def reconstruir_solucion(optimo, monedas):
                 eleccion_der = optimo[izq][der - 2] if izq <= der - 2 else 0
                 
             if monedas[izq] + eleccion_izq == optimo[izq][der]:
+                optimo[izq][der] = Fore.GREEN + f"{optimo[izq][der]}" + Style.RESET_ALL
                 elecciones.append(f"Sophia debe agarrar la primera ({monedas[izq]})")
                 ganancia_sophia += monedas[izq]
                 izq += 1
             elif monedas[izq] + eleccion_der == optimo[izq][der]:
+                optimo[izq][der] = Fore.GREEN + f"{optimo[izq][der]}" + Style.RESET_ALL
                 elecciones.append(f"Sophia debe agarrar la ultima ({monedas[der]})")
                 ganancia_sophia += monedas[der]
                 der -= 1
             elif monedas[der] + eleccion_der == optimo[izq][der]:
+                optimo[izq][der] = Fore.GREEN + f"{optimo[izq][der]}" + Style.RESET_ALL
                 elecciones.append(f"Sophia debe agarrar la ultima ({monedas[der]})")
                 ganancia_sophia += monedas[der]
                 der -= 1
             elif monedas[der] + eleccion_izq == optimo[izq][der]:
+                optimo[izq][der] = Fore.GREEN + f"{optimo[izq][der]}" + Style.RESET_ALL
                 elecciones.append(f"Sophia debe agarrar la primera ({monedas[izq]})")
                 ganancia_sophia += monedas[izq]
                 izq += 1
@@ -91,10 +98,7 @@ def reconstruir_solucion(optimo, monedas):
 
         turno_sophia = not turno_sophia 
 
-    
-    print(tabulate(dict(Persona=["Sophia", "Mateo"], Ganancia=[ganancia_sophia, ganancia_mateo]), headers="keys"))
-
-    return elecciones
+    return elecciones, optimo, ganancia_sophia, ganancia_mateo
 
 
 if __name__ == "__main__":
@@ -111,7 +115,11 @@ if __name__ == "__main__":
         sys.exit()
 
     monedas = leer_archivo(f'archivos/{str(sys.argv[1])}.txt')
-    elecciones = jugar(monedas)
+    elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
 
+    print(tabulate(dict(Persona=["Sophia", "Mateo"], Ganancia=[ganancia_sophia, ganancia_mateo]), headers="keys"))
+    print()
+    print(tabulate(optimo, headers=[i + 1 for i in range(len(monedas))]))
+    print()
     print(tabulate([[i + 1, eleccion] for i, eleccion in enumerate(elecciones)], headers=["Movimiento", "Eleccion"]))
    
