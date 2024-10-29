@@ -110,7 +110,9 @@ if __name__ == "__main__":
         tests(leer_archivo, jugar)
         sys.exit()
 
-    monedas = leer_archivo(f'archivos/{str(sys.argv[1])}.txt')
+    # monedas = leer_archivo(f'archivos/{str(sys.argv[1])}.txt')
+    
+    monedas = leer_archivo(sys.argv[1])
     elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
 
     print(tabulate(dict(Persona=["Sophia", "Mateo"], Ganancia=[ganancia_sophia, ganancia_mateo]), headers="keys"))
