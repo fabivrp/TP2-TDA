@@ -66,22 +66,18 @@ def reconstruir_solucion(optimo, monedas):
                 eleccion_der = optimo[izq][der - 2] if izq <= der - 2 else 0
                 
             if monedas[izq] + eleccion_izq == optimo[izq][der]:
-                optimo[izq][der] = Fore.GREEN + f"{optimo[izq][der]}" + Style.RESET_ALL
                 elecciones.append(f"Sophia debe agarrar la primera ({monedas[izq]})")
                 ganancia_sophia += monedas[izq]
                 izq += 1
             elif monedas[izq] + eleccion_der == optimo[izq][der]:
-                optimo[izq][der] = Fore.GREEN + f"{optimo[izq][der]}" + Style.RESET_ALL
                 elecciones.append(f"Sophia debe agarrar la ultima ({monedas[der]})")
                 ganancia_sophia += monedas[der]
                 der -= 1
             elif monedas[der] + eleccion_der == optimo[izq][der]:
-                optimo[izq][der] = Fore.GREEN + f"{optimo[izq][der]}" + Style.RESET_ALL
                 elecciones.append(f"Sophia debe agarrar la ultima ({monedas[der]})")
                 ganancia_sophia += monedas[der]
                 der -= 1
             elif monedas[der] + eleccion_izq == optimo[izq][der]:
-                optimo[izq][der] = Fore.GREEN + f"{optimo[izq][der]}" + Style.RESET_ALL
                 elecciones.append(f"Sophia debe agarrar la primera ({monedas[izq]})")
                 ganancia_sophia += monedas[izq]
                 izq += 1
@@ -118,8 +114,6 @@ if __name__ == "__main__":
     elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
 
     print(tabulate(dict(Persona=["Sophia", "Mateo"], Ganancia=[ganancia_sophia, ganancia_mateo]), headers="keys"))
-    print()
-    print(tabulate(optimo, headers=[i + 1 for i in range(len(monedas))]))
     print()
     print(tabulate([[i + 1, eleccion] for i, eleccion in enumerate(elecciones)], headers=["Movimiento", "Eleccion"]))
    
