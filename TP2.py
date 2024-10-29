@@ -20,7 +20,7 @@ def ecuacion_recurrencia(optimo, monedas, izq, der):
     else:
         eleccion_izq = optimo[izq + 1][der - 1] if izq + 1 <= der - 1 else 0
 
-    if monedas[izq] > monedas[der - 2]:
+    if monedas[izq] > monedas[der - 1]:
         eleccion_der = optimo[izq + 1][der - 1] if izq + 1 <= der - 1 else 0
     else:
         eleccion_der = optimo[izq][der - 2] if izq <= der - 2 else 0
