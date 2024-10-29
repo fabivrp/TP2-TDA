@@ -2,9 +2,6 @@ import csv
 from tabulate import tabulate
 import sys
 from tests import tests, unittest
-from colorama import Fore, Style, init
-
-init()
 
 
 def leer_archivo(archivo):
@@ -111,7 +108,7 @@ if __name__ == "__main__":
         sys.exit()
 
     # monedas = leer_archivo(f'archivos/{str(sys.argv[1])}.txt')
-    
+
     monedas = leer_archivo(sys.argv[1])
     elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
 
