@@ -107,12 +107,12 @@ if __name__ == "__main__":
         tests(leer_archivo, jugar)
         sys.exit()
 
-    # monedas = leer_archivo(f'archivos/{str(sys.argv[1])}.txt')
-
-    monedas = leer_archivo(sys.argv[1])
-    elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
-
-    print(tabulate(dict(Persona=["Sophia", "Mateo"], Ganancia=[ganancia_sophia, ganancia_mateo]), headers="keys"))
-    print()
-    print(tabulate([[i + 1, eleccion] for i, eleccion in enumerate(elecciones)], headers=["Movimiento", "Eleccion"]))
    
+    monedas = leer_archivo(sys.argv[1])
+    
+    elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
+    print("Las elecciones que deben hacer Sophia y Mateo junto a sus puntajes finales esperados se han guardado en el archivo 'resultado_elecciones.txt'")
+    with open("resultado_elecciones.txt", "w") as archivo_resultado:
+        archivo_resultado.write(tabulate(dict(Persona=["Sophia", "Mateo"], Ganancia=[ganancia_sophia, ganancia_mateo]), headers="keys"))
+        archivo_resultado.write("\n\n")
+        archivo_resultado.write(tabulate([[i + 1, eleccion] for i, eleccion in enumerate(elecciones)], headers=["Movimiento", "Eleccion"]))
