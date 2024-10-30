@@ -12,13 +12,11 @@ pip install -r requirements.txt
 
 ### Usar un archivo en particular
 
-Para ejecutar un archivo en particular, ejecutar el comando 
+Para ejecutar un archivo en particular, ejecutar el comando (ponemos el ejemplo de 25.txt)
 
 ``` 
-python TP2.py [numero_archivo]
+python TP2.py archivos/25.txt
 ```
-
-Solo con el número alcanza, no hace falta la extensión ".txt"
 
 ### Ejecutar una prueba en un archivo en particular
 ```
