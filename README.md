@@ -18,6 +18,14 @@ Para ejecutar un archivo en particular, ejecutar el comando (ponemos el ejemplo 
 python TP2.py archivos/25.txt
 ```
 
+### Generar un caso
+
+Para generar un caso y ejecutar el algoritmo, ejecutar el comando:
+
+``` 
+python TP2.py --gen [numero_entero_de_monedas_totales]
+```
+
 ### Ejecutar una prueba en un archivo en particular
 ```
 python TP2.py --test [numero_archivo]
