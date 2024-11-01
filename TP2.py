@@ -95,6 +95,26 @@ def reconstruir_solucion(optimo, monedas):
     return elecciones, optimo, ganancia_sophia, ganancia_mateo
 
 
+
+def algoritmo(monedas):
+    elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
+    print("Las elecciones que deben hacer Sophia y Mateo junto a sus puntajes finales esperados se han guardado en el archivo 'resultado_elecciones.txt'")
+
+    print("Ganancia Sophia:", ganancia_sophia)
+    print("Ganancia Mateo:", ganancia_mateo)
+
+    with open("resultado_elecciones.txt", "w") as archivo_resultado:
+        archivo_resultado.write(f"Ganancia Sophia: {ganancia_sophia}\n")
+        archivo_resultado.write(f"Ganancia Mateo: {ganancia_mateo}\n")
+
+        archivo_resultado.write("\n")
+        archivo_resultado.write("Elecciones:\n")
+
+        for eleccion in enumerate(elecciones):
+            archivo_resultado.write(f"{eleccion[0] + 1}. {eleccion[1]}\n")
+
+
+
 if __name__ == "__main__":
 
     if sys.argv[1] == "-h":
@@ -109,10 +129,7 @@ if __name__ == "__main__":
 
             monedas = leer_archivo("archivos/" + sys.argv[2] + ".txt")
     
-            elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
-
-            print("Ganancia Sophia:", ganancia_sophia)
-            print("Ganancia Mateo:", ganancia_mateo)
+            algoritmo(monedas)
 
         sys.exit()
 
@@ -125,15 +142,6 @@ if __name__ == "__main__":
    
     monedas = leer_archivo(sys.argv[1])
     
-    elecciones, optimo, ganancia_sophia, ganancia_mateo = jugar(monedas)
-    # print("Las elecciones que deben hacer Sophia y Mateo junto a sus puntajes finales esperados se han guardado en el archivo 'resultado_elecciones.txt'")
+    algoritmo(monedas)
 
-    print("Ganancia Sophia:", ganancia_sophia)
-    print("Ganancia Mateo:", ganancia_mateo)
-
-    
-    # with open("resultado_elecciones.txt", "w") as archivo_resultado:
-    #     archivo_resultado.write(tabulate(dict(Persona=["Sophia", "Mateo"], Ganancia=[ganancia_sophia, ganancia_mateo]), headers="keys"))
-    #     archivo_resultado.write("\n\n")
-    #     archivo_resultado.write(tabulate([[i + 1, eleccion] for i, eleccion in enumerate(elecciones)], headers=["Movimiento", "Eleccion"]))
 
